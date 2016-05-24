@@ -13,18 +13,36 @@ import play.api.test.Helpers._
 @RunWith(classOf[JUnitRunner])
 class ApplicationSpec extends Specification {
 
-  "Application" should {
-
-    "send 404 on a bad request" in new WithApplication{
-      route(FakeRequest(GET, "/boum")) must beNone
+  "The 'Hello world' string" should {
+    "contain 11 characters" in {
+      "Hello world" must have size(11)
     }
+    "start with 'Hello'" in {
+      "Hello world" must startWith("Hello")
+    }
+    "end with 'world'" in {
+      "Hello world" must endWith("world")
+    }
+  }
+
+  "Application" should {
 
     "render the index page" in new WithApplication{
       val home = route(FakeRequest(GET, "/")).get
+      //val fakeRequest = FakeRequest(Helpers.POST, controllers.routes.Application.createproduct().url, FakeHeaders(), """ {"name": "New Group", "collabs": ["foo", "asdf"]} """)
 
       status(home) must equalTo(OK)
       contentType(home) must beSome.which(_ == "text/html")
-      contentAsString(home) must contain ("Your new application is ready.")
+      contentAsString(home) must contain ("My first e-commerce in Play framework")
     }
+
+    "render the index page" in new WithApplication{
+      val home = route(FakeRequest(GET, "/createproduct")).get
+
+      status(home) must equalTo(OK)
+      contentType(home) must beSome.which(_ == "text/html")
+      contentAsString(home) must contain ("Add new product:")
+    }
+
   }
 }
